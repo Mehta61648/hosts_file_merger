@@ -36,3 +36,10 @@ The trade-off: **first-seen wins**. The order of inputs to `merge()` is the prec
 ## Awkward edge
 
 A line that is *only* an address (`127.0.0.1` with nothing after it) is silently dropped rather than emitted as a bare address or raised as an error. Blocklists in the wild are noisy; the library chooses resilience over strictness here. If you need validation, inspect the inputs before merging.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
